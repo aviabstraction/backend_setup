@@ -1,23 +1,17 @@
-version: 2
+version: 2.1
+orbs:
+  node: circleci/node@1.1.6
 jobs:
-  build:
-    docker:
-      - image: circleci/node:10.15
-      - image: circleci/mongo:latest
+  build-and-test:
+    executor:
+      name: node/default
     steps:
       - checkout
-      - run:
-          name: Install npm dependencies
-          command: npm install
-      - save-cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-          paths:
-            - ./node_modules
-      - run:
-          name: test
-          command: npm test
-
+      - node/with-cache:
+          steps:
+            - run: npm install
+            - run: npm test
 workflows:
-  buildworkflow:
-    jobs:
-      - build
+    build-and-test:
+      jobs:
+        - build-and-test
