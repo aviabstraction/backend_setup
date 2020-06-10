@@ -2,6 +2,7 @@ import express, { Application } from "express";
 import cors from "cors";
 import routes from "../api";
 import config from "../config/config";
+import methodOverride from "method-override";
 
 export default ({ app }: { app: Application }) => {
   const {
@@ -32,4 +33,6 @@ export default ({ app }: { app: Application }) => {
   app.use(express.json());
 
   app.use(prefix, routes());
+
+  app.use(methodOverride());
 };
